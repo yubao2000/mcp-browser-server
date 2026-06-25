@@ -31,11 +31,13 @@ const PLANS = [
     cta: "GitHub 下载",
     href: "https://github.com/yubao2000/mcp-browser-server",
     highlight: false,
+    badge: null,
+    originalPrice: null,
   },
   {
     tier: "Pro 月度版",
-    price: "¥69",
-    period: "/月",
+    price: "限时免费",
+    period: "",
     features: [
       "全部免费版功能",
       "批量自动化（CSV 驱动 100 条/次）",
@@ -44,23 +46,27 @@ const PLANS = [
       "JSON/CSV 格式导出",
       "企业级技术支持",
     ],
-    cta: "联系购买",
-    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
+    cta: "✨ 立即免费使用",
+    href: "https://github.com/yubao2000/mcp-browser-server",
     highlight: true,
+    badge: "限时免费",
+    originalPrice: "¥69/月",
   },
   {
     tier: "Pro 终身版",
-    price: "¥499",
-    period: "一次付费",
+    price: "限时免费",
+    period: "",
     features: [
       "全部 Pro 版功能",
       "永久免费升级",
       "优先技术支持",
       "私有化部署咨询",
     ],
-    cta: "联系购买",
-    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
+    cta: "✨ 立即免费使用",
+    href: "https://github.com/yubao2000/mcp-browser-server",
     highlight: false,
+    badge: "限时免费",
+    originalPrice: "¥499",
   },
 ];
 
@@ -201,11 +207,34 @@ export default function Home() {
                   推荐
                 </div>
               )}
+              {plan.badge && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: plan.highlight ? 20 : -12,
+                    right: -8,
+                    background: "#10b981",
+                    color: "white",
+                    padding: "4px 12px",
+                    borderRadius: 8,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    transform: "rotate(3deg)",
+                  }}
+                >
+                  🎉 {plan.badge}
+                </div>
+              )}
               <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>
                 {plan.tier}
               </div>
               <div style={{ marginBottom: 20 }}>
-                <span style={{ fontSize: 36, fontWeight: 700 }}>{plan.price}</span>
+                {plan.originalPrice && (
+                  <div style={{ fontSize: 14, color: "#94a3b8", textDecoration: "line-through", marginBottom: 2 }}>
+                    {plan.originalPrice}
+                  </div>
+                )}
+                <span style={{ fontSize: 36, fontWeight: 700, color: plan.badge ? "#10b981" : undefined }}>{plan.price}</span>
                 {plan.period && (
                   <span style={{ color: "#64748b", fontSize: 14 }}> {plan.period}</span>
                 )}
