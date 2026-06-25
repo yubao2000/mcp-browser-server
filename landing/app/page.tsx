@@ -44,8 +44,8 @@ const PLANS = [
       "JSON/CSV 格式导出",
       "企业级技术支持",
     ],
-    cta: "爱发电购买",
-    href: "https://afdian.com/a/yubao2000", // ⚠️ 替换成你的爱发电主页链接
+    cta: "联系购买",
+    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
     highlight: true,
   },
   {
@@ -58,8 +58,8 @@ const PLANS = [
       "优先技术支持",
       "私有化部署咨询",
     ],
-    cta: "爱发电购买",
-    href: "https://afdian.com/a/yubao2000", // ⚠️ 替换成你的爱发电主页链接
+    cta: "联系购买",
+    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
     highlight: false,
   },
 ];
