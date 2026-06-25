@@ -22,7 +22,7 @@ const PLANS = [
     tier: "免费版",
     price: "$0",
     features: [
-      "全部 30+ 个工具",
+      "全部 34 个工具",
       "单标签页操作",
       "Cookie 持久化",
       "所有基础交互",
@@ -33,8 +33,8 @@ const PLANS = [
     highlight: false,
   },
   {
-    tier: "Pro 版",
-    price: "$9.9",
+    tier: "Pro 月度版",
+    price: "¥69",
     period: "/月",
     features: [
       "全部免费版功能",
@@ -44,13 +44,13 @@ const PLANS = [
       "JSON/CSV 格式导出",
       "企业级技术支持",
     ],
-    cta: "早鸟登记",
-    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
+    cta: "爱发电购买",
+    href: "https://afdian.com/a/yubao2000", // ⚠️ 替换成你的爱发电主页链接
     highlight: true,
   },
   {
-    tier: "终身版",
-    price: "$99",
+    tier: "Pro 终身版",
+    price: "¥499",
     period: "一次付费",
     features: [
       "全部 Pro 版功能",
@@ -58,8 +58,8 @@ const PLANS = [
       "优先技术支持",
       "私有化部署咨询",
     ],
-    cta: "早鸟登记",
-    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
+    cta: "爱发电购买",
+    href: "https://afdian.com/a/yubao2000", // ⚠️ 替换成你的爱发电主页链接
     highlight: false,
   },
 ];

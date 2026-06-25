@@ -1,85 +1,82 @@
 # MCP Browser Agent — Pro 版变现配置指南
 
-## 支付方案选择
+## 支付方案
 
-### 方案 A：Lemon Squeezy（推荐，全球可用）
+### 🇨🇳 方案 A：爱发电（国内推荐，支持支付宝/微信）
+https://afdian.net
+
+**设置步骤：**
+
+1. 注册爱发电 → 创建创作者主页
+2. 创建两个 **售卖型商品**（不是赞助/发电）：
+
+   | 商品 | 定价 | 说明 |
+   |:----|:----:|:-----|
+   | MCP Browser Agent Pro（月度） | ¥69 | 月付订阅 |
+   | MCP Browser Agent Pro（终身） | ¥499 | 一次付费 |
+
+3. **关键：开启自动发货**
+   - 在商品编辑页 → 勾选 **"这是一个实体/数字商品"**
+   - 填写自动发货内容，例如：
+
+   ```
+   感谢购买 MCP Browser Agent Pro！
+   
+   配置方式：
+   1. 打开 ~/.mcp-browser.json（或项目目录下的 .mcp-browser.json）
+   2. 添加以下内容：
+   
+   {
+     "licenseKey": "mcpba-xxxx-xxxx-xxxx-xxxxxxxx"
+   }
+   
+   或者设置环境变量：
+   export MCP_PRO_LICENSE=mcpba-xxxx-xxxx-xxxx-xxxxxxxx
+   
+   3. 重启 MCP 服务即可解锁 Pro 功能
+   ```
+
+4. 把 License Key 填入自动发货内容中
+
+### 🌍 方案 B：Lemon Squeezy（国外用户）
 https://www.lemonsqueezy.com
-- 支持 Stripe（信用卡）+ Alipay（支付宝）
-- 自动生成和验证 License Key
-- 托管结账页面，不需要自己写支付页面
-- 费率：5% + $0.50/笔
-
-### 方案 B：手动收款（零成本启动）
-- 用户通过 Jinshuju 表单登记
-- 你手动发 License Key
-- 等有一定用户量再上自动化支付
-
-**目前先用方案 B，等有第一批用户后切换方案 A。**
+- 支持信用卡 + PayPal
+- 自动生成 License Key
+- 适合海外用户
 
 ---
 
-## Lemon Squeezy 接入步骤（以后做）
-
-### 1. 注册账号
-https://www.lemonsqueezy.com/register
-
-### 2. 创建产品
-- Products → Create Product
-- Name: `MCP Browser Agent Pro`
-- Price: Monthly $9.9 / Lifetime $99
-- 勾选 "License key" 选项（让 Lemon Squeezy 自动生成 Key）
-
-### 3. 获取 API 密钥
-- Settings → API → Generate API Key
-
-### 4. 对接验证
-将 Lemon Squeezy 的 License Key 验证 API 集成到 `src/pro/license.ts` 中：
-
-```typescript
-// 在线验证示例
-async function verifyOnline(licenseKey: string): Promise<boolean> {
-  const response = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env.LEMON_API_KEY}`
-    },
-    body: JSON.stringify({
-      license_key: licenseKey,
-    }),
-  });
-  const data = await response.json();
-  return data.valid;
-}
-```
-
----
-
-## License Key 生成（当前可用）
+## License Key 生成
 
 ```bash
-# 生成一个 License Key（开发环境）
+# 安装依赖
+npm install
+
+# 生成一个 License Key
 node tools/generate-license.mjs
 
-# 生成 5 个 Key
+# 生成 5 个
 node tools/generate-license.mjs 5
 ```
 
-### 用户使用
-用户在 `.mcp-browser.json` 配置文件中设置 License Key：
+**生产环境密钥：**
+```bash
+# 生成时使用跟代码里一致的环境变量
+MCP_PRO_SECRET=你的密钥 node tools/generate-license.mjs 10
+```
+
+---
+
+## 用户配置方式
+
+用户在 `.mcp-browser.json` 中设置 License Key：
 ```json
 {
   "licenseKey": "mcpba-xxxx-xxxx-xxxx-xxxxxxxx"
 }
 ```
+
 或者通过环境变量：
 ```bash
-MCP_PRO_LICENSE=xxx mcp-browse-agent
+MCP_PRO_LICENSE=mcpba-xxxx-xxxx-xxxx-xxxxxxxx mcp-browse-agent
 ```
-
-### 生产环境密钥
-生成密钥时设置 `MCP_PRO_SECRET` 环境变量（必须跟代码里的一致）：
-```bash
-MCP_PRO_SECRET=你的密钥 node tools/generate-license.mjs 10
-```
-同时在 `.env` 或部署环境中设置相同的密钥。

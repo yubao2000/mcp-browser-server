@@ -1,16 +1,13 @@
 /**
- * MCP Browser Agent — Lemon Squeezy 支付集成
+ * MCP Browser Agent — 支付集成模块
  *
- * 完整功能：
- *   - 创建结账链接 → 用户购买后跳转到你的产品页
- *   - 验证 License Key → 启动时校验用户输入的 Key
- *   - 处理 Webhook → 支付成功后自动激活 License
+ * 支持双通道：
+ *   1. 爱发电（国内）— 支付宝/微信支付
+ *   2. Lemon Squeezy（国外）— 信用卡/ PayPal
  *
  * 使用前需要：
- *   1. 在 https://www.lemonsqueezy.com 注册账号
- *   2. 创建产品（Product）和定价（Variant）
- *   3. 获取 API Key：Settings → API → Generate
- *   4. 设置 Webhook：Settings → Webhooks → 指向你的服务器
+ *   1. 爱发电: 在 https://afdian.net 创建商品，获取商品链接
+ *   2. Lemon Squeezy: 注册账号，创建产品，获取 API Key
  */
 
 const LEMON_API_BASE = "https://api.lemonsqueezy.com/v1";
