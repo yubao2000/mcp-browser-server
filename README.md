@@ -69,25 +69,36 @@
 - Node.js >= 18
 - （推荐）Claude Desktop / Cursor / 任何支持 MCP 的客户端
 
-### 一键安装
+### 快速使用
+
 ```bash
-# 方式 1：全局安装
+# 全局安装（推荐）
 npm install -g @yubao2000/mcp-browser-agent
 
-# 方式 2：直接运行
-npx @yubao2000/mcp-browser-agent
+# 启动服务
+mcp-browse-agent
 ```
 
 ### 在 Claude Desktop 中配置
 
-编辑 `claude_desktop_config.json`：
+找到配置文件 `claude_desktop_config.json`：
+
+| 平台 | 路径 |
+|:----:|------|
+| **Windows** | `%APPDATA%\Claude\claude_desktop_config.json` |
+| **macOS** | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| **Linux** | `~/.config/Claude/claude_desktop_config.json` |
+
+> 💡 **找不到文件？** 打开 Claude Desktop → 点 **Developer**（开发者）→ **Edit MCP Config**（编辑 MCP 配置），会自动打开或创建这个文件。
+
+将以下内容填入：
 
 ```json
 {
   "mcpServers": {
     "browser-agent": {
-      "command": "npx",
-      "args": ["-y", "@yubao2000/mcp-browser-agent"]
+      "command": "mcp-browse-agent",
+      "args": []
     }
   }
 }

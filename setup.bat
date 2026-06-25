@@ -68,8 +68,8 @@ echo   2. 在 Claude Desktop 配置中填入：
 echo      {
 echo        "mcpServers": {
 echo          "browser-agent": {
-echo            "command": "npx",
-echo            "args": ["-y", "@yubao2000/mcp-browser-agent"]
+echo            "command": "mcp-browse-agent",
+echo            "args": []
 echo          }
 echo        }
 echo      }

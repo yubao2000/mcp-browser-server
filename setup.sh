@@ -43,6 +43,6 @@ echo ""
 echo "下一步:"
 echo "  1. 发布到 npm: npm publish"
 echo "  2. 在 Claude Desktop 配置中填入:"
-echo '     { "mcpServers": { "browser-agent": { "command": "npx", "args": ["-y", "@yubao2000/mcp-browser-agent"] } } }'
+echo '     { "mcpServers": { "browser-agent": { "command": "mcp-browse-agent", "args": [] } } }'
 echo "  3. 对 Claude 说: '帮我打开百度首页截图'"
 echo ""

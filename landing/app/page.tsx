@@ -257,8 +257,8 @@ export default function Home() {
             {`{
   "mcpServers": {
     "browser-agent": {
-      "command": "npx",
-      "args": ["-y", "@yubao2000/mcp-browser-agent"]
+      "command": "mcp-browse-agent",
+      "args": []
     }
   }
 }`}
