@@ -26,6 +26,8 @@ import puppeteer, { Browser, Page, ElementHandle } from "puppeteer";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { getLicenseStatus, getLicenseKey } from "./pro/license.js";
+import { runBatch, exportToCSV, exportToJSON, BatchStep } from "./pro/features.js";
 
 // ==================== 配置 ====================
 
@@ -596,6 +598,48 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           steps: { type: "number", description: "移动步数（越多越平滑，默认 10）", default: 10 },
         },
         required: ["x", "y"],
+      },
+    },
+    // ========== Pro 版工具（需 License Key）==========
+    {
+      name: "browser_batch",
+      description: "⭐ PRO 版 — 批量执行自动化操作序列。按顺序执行一系列操作：打开网页、点击、填表、提取、等待等。需要 Pro License。",
+      inputSchema: {
+        type: "object",
+        properties: {
+          steps: {
+            type: "array",
+            description: "操作步骤列表，按顺序执行",
+            items: {
+              type: "object",
+              properties: {
+                action: { type: "string", enum: ["goto", "click", "fill", "extract", "wait", "scroll", "screenshot", "evaluate"], description: "操作类型" },
+                name: { type: "string", description: "步骤名称（可选）" },
+                url: { type: "string", description: "URL（goto 时用）" },
+                selector: { type: "string", description: "CSS 选择器" },
+                text: { type: "string", description: "文本内容（click 按文本时用）" },
+                value: { type: "string", description: "输入值（fill 时用）" },
+                ms: { type: "number", description: "等待毫秒数（wait 时用）" },
+                code: { type: "string", description: "JS 代码（evaluate 时用）" },
+              },
+              required: ["action"],
+            },
+          },
+        },
+        required: ["steps"],
+      },
+    },
+    {
+      name: "browser_export",
+      description: "⭐ PRO 版 — 将页面数据导出为 CSV 或 JSON 文件。需要 Pro License。",
+      inputSchema: {
+        type: "object",
+        properties: {
+          selector: { type: "string", description: "表格/列表的 CSS 选择器" },
+          format: { type: "string", enum: ["csv", "json"], description: "导出格式", default: "csv" },
+          filePath: { type: "string", description: "保存路径（可选，默认输出到结果）" },
+        },
+        required: ["selector"],
       },
     },
     {
@@ -1216,6 +1260,102 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: "text", text: lastResult }] };
       }
 
+      // ======================== Pro 版工具 ========================
+
+      case "browser_batch": {
+        const p = await getPage();
+        const steps = args?.steps as BatchStep[];
+
+        if (!steps || !Array.isArray(steps)) {
+          throw new Error("请提供 steps 数组");
+        }
+
+        // Pro License 检查
+        const proStatus = getLicenseStatus();
+        if (proStatus.tier !== "pro") {
+          return {
+            content: [{ type: "text", text: "❌ 批量自动化是 Pro 版功能。\n当前: 免费版\n请设置有效的 License Key 解锁 Pro 功能。" }],
+            isError: true,
+          };
+        }
+
+        const results = await runBatch(p, steps);
+        const summary = results.map((r) =>
+          `  ${r.success ? "✅" : "❌"} ${r.name}: ${r.success ? (r.data ? String(r.data).slice(0, 60) : "完成") : r.error}`
+        ).join("\n");
+
+        return {
+          content: [{ type: "text", text: `📋 批量执行结果 (${results.filter(r => r.success).length}/${results.length}):\n${summary}` }],
+        };
+      }
+
+      case "browser_export": {
+        const p = await getPage();
+        const sel = args?.selector as string;
+        const format = (args?.format as string) || "csv";
+        const filePath = args?.filePath as string | undefined;
+
+        // Pro License 检查
+        const proStatus = getLicenseStatus();
+        if (proStatus.tier !== "pro") {
+          return {
+            content: [{ type: "text", text: "❌ 数据导出是 Pro 版功能。\n当前: 免费版\n请设置有效的 License Key 解锁 Pro 功能。" }],
+            isError: true,
+          };
+        }
+
+        await p.waitForSelector(sel, { timeout: 10000 });
+
+        // 提取表格数据
+        const data = await p.evaluate((s: string) => {
+          const table = document.querySelector(s);
+          if (!table) return null;
+
+          const rows = table.querySelectorAll("tr");
+          const result: Record<string, string>[] = [];
+          const headers: string[] = [];
+
+          rows.forEach((row, i) => {
+            const cells = row.querySelectorAll("th, td");
+            const values = Array.from(cells).map((c) => (c as HTMLElement).innerText.trim());
+
+            if (i === 0 && row.querySelectorAll("th").length > 0) {
+              headers.push(...values);
+            } else if (headers.length > 0) {
+              const obj: Record<string, string> = {};
+              headers.forEach((h, j) => { obj[h] = values[j] || ""; });
+              result.push(obj);
+            } else {
+              const obj: Record<string, string> = {};
+              values.forEach((v, j) => { obj[`col${j}`] = v; });
+              result.push(obj);
+            }
+          });
+
+          return result;
+        }, sel);
+
+        if (!data || data.length === 0) {
+          throw new Error(`未找到表格数据: ${sel}`);
+        }
+
+        if (filePath) {
+          if (format === "csv") {
+            exportToCSV(data, filePath);
+          } else {
+            exportToJSON(data, filePath);
+          }
+          return { content: [{ type: "text", text: `✅ 已导出 ${data.length} 行数据到 ${filePath}` }] };
+        }
+
+        // 没有 filePath 则返回文本结果
+        const output = format === "csv"
+          ? Object.keys(data[0]).join(",") + "\n" + data.map(r => Object.values(r).join(",")).join("\n")
+          : JSON.stringify(data, null, 2);
+
+        return { content: [{ type: "text", text: output.slice(0, 10000) }] };
+      }
+
       default:
         throw new McpError(ErrorCode.MethodNotFound, `未知工具: ${name}`);
     }
@@ -1252,7 +1392,7 @@ process.on("SIGTERM", shutdown);
 console.error(`[mcp-browser-agent] v${PKG.version} 已启动`);
 console.error(`[mcp-browser-agent] 数据目录: ${CONFIG.dataDir}`);
 console.error(`[mcp-browser-agent] Cookies: ${fs.existsSync(CONFIG.cookieFile) ? `已加载 ${JSON.parse(fs.readFileSync(CONFIG.cookieFile,"utf-8")).length} 个` : "尚无"}`);
-console.error(`[mcp-browser-agent] 工具数量: 34`);
+console.error(`[mcp-browser-agent] 工具数量: 36 (含 2 个 Pro 版)`);
 console.error(`[mcp-browser-agent] 输入 valid JSON-RPC 到 stdin，输出到 stdout`);
 console.error(`[mcp-browser-agent] SHOW_BROWSER=true 可显示浏览器窗口（调试/过验证码）`);
 
