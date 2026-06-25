@@ -4,5 +4,7 @@ dist/
 .env
 .env.local
 chrome-bin/
-.browser-data/ 
+.browser-data/
+landing/.next/
+landing/out/ 
  
