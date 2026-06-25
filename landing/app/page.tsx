@@ -66,8 +66,6 @@ const PLANS = [
 
 export default function Home() {
   return (
-
-  return (
     <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
       {/* ====== Hero ====== */}
       <header
