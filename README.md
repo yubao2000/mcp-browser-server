@@ -3,7 +3,7 @@
 **让 AI Agent（Claude/GPT）像人一样操作浏览器。**
 **Let AI agents control the browser just like a human.**
 
-[![npm version](https://img.shields.io/npm/v/mcp-browser-agent)](https://www.npmjs.com/package/mcp-browser-agent)
+[![npm version](https://img.shields.io/npm/v/@yubao2000/mcp-browser-agent)](https://www.npmjs.com/package/@yubao2000/mcp-browser-agent)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org)
 
@@ -72,10 +72,10 @@
 ### 一键安装
 ```bash
 # 方式 1：全局安装
-npm install -g mcp-browser-agent
+npm install -g @yubao2000/mcp-browser-agent
 
 # 方式 2：直接运行
-npx mcp-browser-agent
+npx @yubao2000/mcp-browser-agent
 ```
 
 ### 在 Claude Desktop 中配置
@@ -87,7 +87,7 @@ npx mcp-browser-agent
   "mcpServers": {
     "browser-agent": {
       "command": "npx",
-      "args": ["-y", "mcp-browser-agent"]
+      "args": ["-y", "@yubao2000/mcp-browser-agent"]
     }
   }
 }

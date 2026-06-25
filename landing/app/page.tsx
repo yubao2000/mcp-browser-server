@@ -104,7 +104,7 @@ export default function Home() {
             ⭐ GitHub 开源
           </a>
           <a
-            href="https://www.npmjs.com/package/mcp-browser-agent"
+            href="https://www.npmjs.com/package/@yubao2000/mcp-browser-agent"
             style={{
               background: "rgba(255,255,255,0.15)",
               color: "white",
@@ -251,14 +251,14 @@ export default function Home() {
           一分钟上手
         </h2>
         <div style={{ background: "#1e293b", color: "#e2e8f0", borderRadius: 12, padding: 24, fontSize: 14, lineHeight: 1.8 }}>
-          <div style={{ marginBottom: 16 }}><span style={{color:"#3b82f6"}}>$</span> npm install -g mcp-browser-agent</div>
+          <div style={{ marginBottom: 16 }}><span style={{color:"#3b82f6"}}>$</span> npm install -g @yubao2000/mcp-browser-agent</div>
           <div style={{ marginBottom: 16 }}><span style={{color:"#3b82f6"}}>$</span> # 在 Claude Desktop 配置中添加:</div>
           <div style={{ marginBottom: 16, paddingLeft: 16, borderLeft: "2px solid #475569" }}>
             {`{
   "mcpServers": {
     "browser-agent": {
       "command": "npx",
-      "args": ["-y", "mcp-browser-agent"]
+      "args": ["-y", "@yubao2000/mcp-browser-agent"]
     }
   }
 }`}

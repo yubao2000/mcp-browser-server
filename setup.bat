@@ -69,7 +69,7 @@ echo      {
 echo        "mcpServers": {
 echo          "browser-agent": {
 echo            "command": "npx",
-echo            "args": ["-y", "mcp-browser-agent"]
+echo            "args": ["-y", "@yubao2000/mcp-browser-agent"]
 echo          }
 echo        }
 echo      }
