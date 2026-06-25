@@ -11,6 +11,9 @@
   "defaultTimeout": 30000,
   "headless": true,
 
+  "//_showBrowser": "设为 true 可显示浏览器窗口（调试/过验证码时用）",
+  "showBrowser": false,
+
   "//_chromePath": "如果 puppeteer 找不到你的 Chrome，手动指定路径",
   "chromePath": null,
 

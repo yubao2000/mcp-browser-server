@@ -5,13 +5,13 @@
  * ================================
  * 让 AI Agent（Claude/GPT）像人一样操作浏览器。
  *
- * 工具完整清单 (29个):
+ * 工具完整清单 (34个):
  *   导航: screenshot, getUrl, getTitle, getHTML, reload, back, forward, pdf
  *   交互: click, fill, clear, select, pressKey, hover, submit, scroll, drag
- *   提取: extract, evaluate, screenshotElement, getCookies
+ *   提取: extract, evaluate, screenshotElement, getCookies, getBounds, getViewport
  *   标签页: newTab, switchTab, closeTab
  *   Cookie: 自动持久化, deleteCookies
- *   高级: wait, iframe, console, reset, close
+ *   高级: wait, iframe, console, reset, clickAt, mouseMove, close
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -49,6 +49,7 @@ interface Config {
   headless: boolean;
   chromePath?: string;
   cookieFile: string;
+  showBrowser?: boolean;
 }
 
 function loadConfig(): Config {
@@ -61,6 +62,9 @@ function loadConfig(): Config {
       } catch { /* 忽略 */ }
     }
   }
+
+  // SHOW_BROWSER=true 可以让浏览器窗口可见，方便调试和人工过验证码
+  const showBrowser = process.env.SHOW_BROWSER === "true" || userConfig.showBrowser === true;
 
   const dataDir = path.resolve(
     userConfig.dataDir || process.env.BROWSER_DATA_DIR || path.resolve(__dirname, "..", ".browser-data")
@@ -75,7 +79,7 @@ function loadConfig(): Config {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
         "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
     defaultTimeout: userConfig.defaultTimeout || 30000,
-    headless: userConfig.headless !== false,
+    headless: userConfig.headless !== false && !showBrowser,
     chromePath: userConfig.chromePath,
   };
 }
@@ -549,6 +553,50 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       name: "browser_reset",
       description: "重置浏览器实例。关闭所有页面和浏览器进程，重新启动。用于浏览器卡死或状态异常时。",
       inputSchema: { type: "object", properties: {} },
+    },
+    // ========== 验证码辅助 ==========
+    {
+      name: "browser_clickAt",
+      description: "在页面的指定坐标位置点击（如无法用 CSS 选择器定位的元素）。用于滑动验证码、弹窗、canvas 等场景。",
+      inputSchema: {
+        type: "object",
+        properties: {
+          x: { type: "number", description: "X 坐标（相对于视口左上角）" },
+          y: { type: "number", description: "Y 坐标（相对于视口左上角）" },
+          button: { type: "string", enum: ["left", "right", "middle"], description: "鼠标按键", default: "left" },
+          clickCount: { type: "number", description: "点击次数", default: 1 },
+        },
+        required: ["x", "y"],
+      },
+    },
+    {
+      name: "browser_getBounds",
+      description: "获取页面上元素的位置和大小信息。用于计算点击坐标、滑动距离等。",
+      inputSchema: {
+        type: "object",
+        properties: {
+          selector: { type: "string", description: "CSS 选择器" },
+        },
+        required: ["selector"],
+      },
+    },
+    {
+      name: "browser_getViewport",
+      description: "获取当前页面的视口大小和滚动位置。",
+      inputSchema: { type: "object", properties: {} },
+    },
+    {
+      name: "browser_mouseMove",
+      description: "模拟鼠标移动到指定坐标。支持分段移动（模拟真人轨迹）。",
+      inputSchema: {
+        type: "object",
+        properties: {
+          x: { type: "number", description: "目标 X 坐标" },
+          y: { type: "number", description: "目标 Y 坐标" },
+          steps: { type: "number", description: "移动步数（越多越平滑，默认 10）", default: 10 },
+        },
+        required: ["x", "y"],
+      },
     },
     {
       name: "browser_close",
@@ -1093,6 +1141,81 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: "text", text: "当前页面已关闭" }] };
       }
 
+      // ======================== 验证码辅助 ========================
+
+      case "browser_clickAt": {
+        const p = await getPage();
+        const x = args?.x as number;
+        const y = args?.y as number;
+        const button = (args?.button as string) || "left";
+        const clickCount = (args?.clickCount as number) ?? 1;
+        await p.mouse.click(x, y, { button: button as any, clickCount });
+        lastResult = `✅ 已点击坐标 (${x}, ${y})`;
+        return { content: [{ type: "text", text: lastResult }] };
+      }
+
+      case "browser_getBounds": {
+        const p = await getPage();
+        const sel = args?.selector as string;
+        await p.waitForSelector(sel, { timeout: 10000 });
+        const bounds = await p.evaluate((s: string) => {
+          const el = document.querySelector(s);
+          if (!el) return null;
+          const rect = el.getBoundingClientRect();
+          return {
+            x: rect.x,
+            y: rect.y,
+            width: rect.width,
+            height: rect.height,
+            centerX: rect.x + rect.width / 2,
+            centerY: rect.y + rect.height / 2,
+            scrollX: window.scrollX,
+            scrollY: window.scrollY,
+            tagName: el.tagName,
+            visible: rect.width > 0 && rect.height > 0,
+          };
+        }, sel);
+        if (!bounds) throw new Error(`未找到元素: ${sel}`);
+        return { content: [{ type: "text", text: JSON.stringify(bounds, null, 2) }] };
+      }
+
+      case "browser_getViewport": {
+        const p = await getPage();
+        const vp = await p.evaluate(() => ({
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          scrollX: window.scrollX,
+          scrollY: window.scrollY,
+          scrollWidth: document.body.scrollWidth,
+          scrollHeight: document.body.scrollHeight,
+        }));
+        return { content: [{ type: "text", text: JSON.stringify(vp, null, 2) }] };
+      }
+
+      case "browser_mouseMove": {
+        const p = await getPage();
+        const x = args?.x as number;
+        const y = args?.y as number;
+        const steps = (args?.steps as number) ?? 10;
+
+        // 分段移动模拟真人鼠标轨迹
+        const start = await p.evaluate(() => ({ x: 0, y: 0 }));
+        // 获取当前鼠标位置
+        const currentPos = await p.evaluate(() => ({ x: 0, y: 0 }));
+        for (let i = 1; i <= steps; i++) {
+          const progress = i / steps;
+          // 加一点随机偏移模拟真人
+          const jitter = () => (Math.random() - 0.5) * 0.5;
+          const cx = x * progress + jitter();
+          const cy = y * progress + jitter();
+          await p.mouse.move(cx, cy);
+        }
+        // 确保最终位置准确
+        await p.mouse.move(x, y);
+        lastResult = `✅ 鼠标已移动到 (${x}, ${y})`;
+        return { content: [{ type: "text", text: lastResult }] };
+      }
+
       default:
         throw new McpError(ErrorCode.MethodNotFound, `未知工具: ${name}`);
     }
@@ -1129,8 +1252,9 @@ process.on("SIGTERM", shutdown);
 console.error(`[mcp-browser-agent] v${PKG.version} 已启动`);
 console.error(`[mcp-browser-agent] 数据目录: ${CONFIG.dataDir}`);
 console.error(`[mcp-browser-agent] Cookies: ${fs.existsSync(CONFIG.cookieFile) ? `已加载 ${JSON.parse(fs.readFileSync(CONFIG.cookieFile,"utf-8")).length} 个` : "尚无"}`);
-console.error(`[mcp-browser-agent] 工具数量: 30`);
+console.error(`[mcp-browser-agent] 工具数量: 34`);
 console.error(`[mcp-browser-agent] 输入 valid JSON-RPC 到 stdin，输出到 stdout`);
+console.error(`[mcp-browser-agent] SHOW_BROWSER=true 可显示浏览器窗口（调试/过验证码）`);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
