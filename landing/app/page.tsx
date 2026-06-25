@@ -163,18 +163,21 @@ export default function Home() {
             gap: 20,
             justifyContent: "center",
             flexWrap: "wrap",
-            maxWidth: 900,
+            maxWidth: 960,
             margin: "0 auto",
+            padding: "0 10px",
           }}
         >
           {PLANS.map((plan) => (
             <div
               key={plan.tier}
               style={{
+                flex: "1 1 260px",
+                maxWidth: 300,
+                minWidth: 240,
                 background: plan.highlight ? "#f0f9ff" : "#f8fafc",
                 borderRadius: 16,
                 padding: 32,
-                width: 260,
                 border: plan.highlight
                   ? "2px solid #3b82f6"
                   : "1px solid #e2e8f0",
