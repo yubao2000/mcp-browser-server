@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 const TOOLS = [
   { icon: "📸", name: "截图", desc: "打开网页截图，支持全页截图" },
   { icon: "🖱️", name: "点击", desc: "CSS 选择器或文本匹配点击" },
@@ -46,8 +44,8 @@ const PLANS = [
       "JSON/CSV 格式导出",
       "企业级技术支持",
     ],
-    cta: "购买 Pro",
-    href: "#buy",
+    cta: "早鸟登记",
+    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
     highlight: true,
   },
   {
@@ -60,14 +58,14 @@ const PLANS = [
       "优先技术支持",
       "私有化部署咨询",
     ],
-    cta: "购买终身",
-    href: "#buy",
+    cta: "早鸟登记",
+    href: "https://wqt8sbwy.jsjform.com/f/wCRtYl",
     highlight: false,
   },
 ];
 
 export default function Home() {
-  const [email, setEmail] = useState("");
+  return (
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8fafc" }}>
