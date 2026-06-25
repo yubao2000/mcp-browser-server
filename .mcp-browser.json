@@ -1,0 +1,26 @@
+{
+  "//": "MCP Browser Agent 配置文件。可以放在项目目录或 ~/.mcp-browser.json",
+  "//_env_override": "环境变量 BROWSER_DATA_DIR 或 MCP_BROWSER_CONFIG 可覆盖路径",
+
+  "dataDir": "./.browser-data",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+  "defaultTimeout": 30000,
+  "headless": true,
+
+  "//_chromePath": "如果 puppeteer 找不到你的 Chrome，手动指定路径",
+  "chromePath": null,
+
+  "//_pro": "以下为 Pro 版功能（需要 licenseKey）",
+  "licenseKey": null,
+  "pro": {
+    "batchSize": 100,
+    "maxTabs": 10,
+    "cookieEncryption": false,
+    "autoSaveInterval": 30000,
+    "exportFormats": ["csv", "json"]
+  }
+}

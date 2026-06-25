@@ -1,0 +1,57 @@
+{
+  "name": "mcp-browser-agent",
+  "version": "0.3.0",
+  "description": "让 AI Agent (Claude/GPT) 像人一样操作浏览器的 MCP Server — 截图/点击/填表/提取/滚动/PDF/标签页管理/Cookie 持久化",
+  "type": "module",
+  "bin": {
+    "mcp-browser-agent": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "src/pro/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "browser-automation",
+    "agent",
+    "puppeteer",
+    "ai",
+    "claude",
+    "web-scraping",
+    "rpa",
+    "automation",
+    "headless-chrome",
+    "browser-agent",
+    "llm",
+    "mcp-server"
+  ],
+  "homepage": "https://github.com/<你的GitHub用户名>/mcp-browser-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/<你的GitHub用户名>/mcp-browser-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/<你的GitHub用户名>/mcp-browser-server/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "puppeteer": "^24.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
