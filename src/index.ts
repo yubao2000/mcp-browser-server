@@ -189,9 +189,34 @@ async function getPage(): Promise<Page> {
 }
 
 /** 获取当前有效的 frame（可能是 iframe 或主页面） */
-async function getCurrentContext(): Promise<Page | ElementHandle<Element>> {
+async function getCurrentContext(): Promise<Page> {
+  // 如果当前在 iframe 中，获取 iframe 所在的 page 上下文
   const p = await getPage();
-  return currentFrame || p;
+  return p;
+}
+
+/** 在页面或 iframe 上下文中执行 evaluate */
+async function contextEvaluate<T>(fn: (...args: any[]) => T, ...args: any[]): Promise<T> {
+  const p = await getPage();
+  if (currentFrame) {
+    const frame = await (currentFrame as any).contentFrame();
+    if (frame) return frame.evaluate(fn, ...args);
+  }
+  return p.evaluate(fn, ...args);
+}
+
+/** 在页面或 iframe 上下文中查找元素 */
+async function contextWaitAndGet(selector: string, timeout = 10000): Promise<any> {
+  const p = await getPage();
+  if (currentFrame) {
+    const frame = await (currentFrame as any).contentFrame();
+    if (frame) {
+      await frame.waitForSelector(selector, { timeout });
+      return frame.$(selector);
+    }
+  }
+  await p.waitForSelector(selector, { timeout });
+  return p.$(selector);
 }
 
 async function ensureBrowserClosed(): Promise<void> {
@@ -1104,7 +1129,7 @@ process.on("SIGTERM", shutdown);
 console.error(`[mcp-browser-agent] v${PKG.version} 已启动`);
 console.error(`[mcp-browser-agent] 数据目录: ${CONFIG.dataDir}`);
 console.error(`[mcp-browser-agent] Cookies: ${fs.existsSync(CONFIG.cookieFile) ? `已加载 ${JSON.parse(fs.readFileSync(CONFIG.cookieFile,"utf-8")).length} 个` : "尚无"}`);
-console.error(`[mcp-browser-agent] 工具数量: 29`);
+console.error(`[mcp-browser-agent] 工具数量: 30`);
 console.error(`[mcp-browser-agent] 输入 valid JSON-RPC 到 stdin，输出到 stdout`);
 
 const transport = new StdioServerTransport();
