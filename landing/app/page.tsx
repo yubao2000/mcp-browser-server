@@ -284,46 +284,25 @@ export default function Home() {
       >
         <h2 style={{ fontSize: 24, marginBottom: 8 }}>关注项目进展</h2>
         <p style={{ opacity: 0.8, marginBottom: 24 }}>
-          Pro 版即将发布，留下邮箱获取早鸟优惠
+          Pro 版即将发布，留下信息获取早鸟优惠
         </p>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            alert(`谢谢 ${email}！Pro 版发布时会通知您 🎉`);
-            setEmail("");
+        <a
+          href="https://wqt8sbwy.jsjform.com/f/wCRtYl"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            background: "#3b82f6",
+            color: "white",
+            padding: "14px 40px",
+            borderRadius: 8,
+            textDecoration: "none",
+            fontWeight: 600,
+            fontSize: 16,
           }}
-          style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}
         >
-          <input
-            type="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              padding: "12px 20px",
-              borderRadius: 8,
-              border: "none",
-              width: 280,
-              fontSize: 15,
-            }}
-          />
-          <button
-            type="submit"
-            style={{
-              background: "#3b82f6",
-              color: "white",
-              border: "none",
-              padding: "12px 28px",
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 15,
-              cursor: "pointer",
-            }}
-          >
-            订阅早鸟通知
-          </button>
-        </form>
+          填写早鸟登记 📝
+        </a>
       </section>
 
       {/* ====== Footer ====== */}
