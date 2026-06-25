@@ -31,7 +31,7 @@ const PLANS = [
       "GitHub 开源",
     ],
     cta: "GitHub 下载",
-    href: "https://github.com/<你的GitHub>/mcp-browser-server",
+    href: "https://github.com/yubao2000/mcp-browser-server",
     highlight: false,
   },
   {
@@ -90,7 +90,7 @@ export default function Home() {
         </p>
         <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
           <a
-            href="https://github.com/<你的GitHub>/mcp-browser-server"
+            href="https://github.com/yubao2000/mcp-browser-server"
             style={{
               background: "#3b82f6",
               color: "white",
@@ -334,7 +334,7 @@ export default function Home() {
       >
         <p>
           MIT License ·{" "}
-          <a href="https://github.com/<你的GitHub>/mcp-browser-server" style={{ color: "#3b82f6" }}>
+          <a href="https://github.com/yubao2000/mcp-browser-server" style={{ color: "#3b82f6" }}>
             GitHub
           </a>{" "}
           ·{" "}

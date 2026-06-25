@@ -34,13 +34,13 @@
     "llm",
     "mcp-server"
   ],
-  "homepage": "https://github.com/<你的GitHub用户名>/mcp-browser-server#readme",
+  "homepage": "https://github.com/yubao2000/mcp-browser-server#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/<你的GitHub用户名>/mcp-browser-server.git"
+    "url": "git+https://github.com/yubao2000/mcp-browser-server.git"
   },
   "bugs": {
-    "url": "https://github.com/<你的GitHub用户名>/mcp-browser-server/issues"
+    "url": "https://github.com/yubao2000/mcp-browser-server/issues"
   },
   "license": "MIT",
   "dependencies": {
