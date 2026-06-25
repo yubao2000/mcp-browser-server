@@ -338,7 +338,7 @@ export default function Home() {
             GitHub
           </a>{" "}
           ·{" "}
-          <a href="https://www.npmjs.com/package/mcp-browser-agent" style={{ color: "#3b82f6" }}>
+          <a href="https://www.npmjs.com/package/@yubao2000/mcp-browser-agent" style={{ color: "#3b82f6" }}>
             npm
           </a>
         </p>
