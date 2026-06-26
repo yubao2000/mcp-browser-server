@@ -167,6 +167,23 @@ mcp-browse-agent
 
 在 Windsurf 中打开 Cascade，启用 MCP 工具后即可使用。支持截图、网页数据提取、表单填写等场景。
 
+### 在 OpenAI Codex CLI 中配置
+
+编辑 `~/.codex/config.toml`：
+
+```toml
+[mcp_servers.browser-agent]
+command = "mcp-browse-agent"
+args = []
+```
+
+配置后在 Codex CLI 会话中使用 `/mcp` 确认服务已加载：
+> *"帮我打开百度首页，截图给我看"*
+>
+> *"帮我提取当前页面的文字内容"*
+
+> 💡 **提示：** 在 Codex 中使用 `/mcp` 列出所有配置的 MCP 服务，`/mcp verbose` 查看详细状态。
+
 ---
 
 ## 🛠 配置文件
