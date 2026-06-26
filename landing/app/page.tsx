@@ -41,8 +41,8 @@ const TOOLS = [
   { icon: "🖱️", name: "鼠标移动", desc: "分段模拟真人鼠标轨迹" },
   { icon: "🚪", name: "关闭页面", desc: "关闭当前页面" },
   // ====== Pro (2) ======
-  { icon: "⭐", name: "批量自动化", desc: "PRO — 按顺序执行多步操作" },
-  { icon: "⭐", name: "数据导出", desc: "PRO — 数据导出 CSV/JSON" },
+  { icon: "⭐", name: "批量自动化", desc: "按顺序执行多步操作，限时免费" },
+  { icon: "⭐", name: "数据导出", desc: "数据导出 CSV/JSON，限时免费" },
 ];
 
 const PLANS = [

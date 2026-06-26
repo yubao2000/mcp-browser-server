@@ -603,7 +603,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     // ========== Pro 版工具（需 License Key）==========
     {
       name: "browser_batch",
-      description: "⭐ PRO 版 — 批量执行自动化操作序列。按顺序执行一系列操作：打开网页、点击、填表、提取、等待等。需要 Pro License。",
+      description: "批量执行自动化操作序列。按顺序执行一系列操作：打开网页、点击、填表、提取、等待等。限时免费中。",
       inputSchema: {
         type: "object",
         properties: {
@@ -631,7 +631,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "browser_export",
-      description: "⭐ PRO 版 — 将页面数据导出为 CSV 或 JSON 文件。需要 Pro License。",
+      description: "将页面数据导出为 CSV 或 JSON 文件。限时免费中。",
       inputSchema: {
         type: "object",
         properties: {
@@ -1270,15 +1270,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           throw new Error("请提供 steps 数组");
         }
 
-        // Pro License 检查
-        const proStatus = getLicenseStatus();
-        if (proStatus.tier !== "pro") {
-          return {
-            content: [{ type: "text", text: "❌ 批量自动化是 Pro 版功能。\n当前: 免费版\n请设置有效的 License Key 解锁 Pro 功能。" }],
-            isError: true,
-          };
-        }
-
         const results = await runBatch(p, steps);
         const summary = results.map((r) =>
           `  ${r.success ? "✅" : "❌"} ${r.name}: ${r.success ? (r.data ? String(r.data).slice(0, 60) : "完成") : r.error}`
@@ -1294,15 +1285,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const sel = args?.selector as string;
         const format = (args?.format as string) || "csv";
         const filePath = args?.filePath as string | undefined;
-
-        // Pro License 检查
-        const proStatus = getLicenseStatus();
-        if (proStatus.tier !== "pro") {
-          return {
-            content: [{ type: "text", text: "❌ 数据导出是 Pro 版功能。\n当前: 免费版\n请设置有效的 License Key 解锁 Pro 功能。" }],
-            isError: true,
-          };
-        }
 
         await p.waitForSelector(sel, { timeout: 10000 });
 
@@ -1392,7 +1374,7 @@ process.on("SIGTERM", shutdown);
 console.error(`[mcp-browser-agent] v${PKG.version} 已启动`);
 console.error(`[mcp-browser-agent] 数据目录: ${CONFIG.dataDir}`);
 console.error(`[mcp-browser-agent] Cookies: ${fs.existsSync(CONFIG.cookieFile) ? `已加载 ${JSON.parse(fs.readFileSync(CONFIG.cookieFile,"utf-8")).length} 个` : "尚无"}`);
-console.error(`[mcp-browser-agent] 工具数量: 36 (含 2 个 Pro 版)`);
+console.error(`[mcp-browser-agent] 工具数量: 36`);
 console.error(`[mcp-browser-agent] 输入 valid JSON-RPC 到 stdin，输出到 stdout`);
 console.error(`[mcp-browser-agent] SHOW_BROWSER=true 可显示浏览器窗口（调试/过验证码）`);
 
