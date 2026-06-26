@@ -142,31 +142,6 @@ mcp-browse-agent
 >
 > **"提取当前页面的所有链接"**
 
-### 在 Windsurf (Codex) 中配置
-
-打开 Windsurf → **设置** → **MCP Servers** → **Add New Server**：
-
-| 字段 | 填什么 |
-|:----|:--------|
-| **Name** | `browser-agent` |
-| **Transport** | `stdio` |
-| **Command** | `mcp-browse-agent` |
-
-或在全局配置中添加 `~/.codeium/windsurf.json`：
-
-```json
-{
-  "mcpServers": {
-    "browser-agent": {
-      "command": "mcp-browse-agent",
-      "args": []
-    }
-  }
-}
-```
-
-在 Windsurf 中打开 Cascade，启用 MCP 工具后即可使用。支持截图、网页数据提取、表单填写等场景。
-
 ### 在 OpenAI Codex CLI 中配置
 
 编辑 `~/.codex/config.toml`：
