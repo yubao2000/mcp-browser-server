@@ -1,20 +1,48 @@
 "use client";
 
 const TOOLS = [
+  // ====== 导航 (8) ======
   { icon: "📸", name: "截图", desc: "打开网页截图，支持全页截图" },
+  { icon: "🔗", name: "获取 URL", desc: "获取当前页面完整 URL" },
+  { icon: "📌", name: "获取标题", desc: "获取页面标题" },
+  { icon: "📄", name: "获取 HTML", desc: "获取页面或元素的 HTML 源码" },
+  { icon: "🔄", name: "刷新", desc: "刷新当前页面（可强制）" },
+  { icon: "⬅️", name: "后退", desc: "浏览器后退到上一页" },
+  { icon: "➡️", name: "前进", desc: "浏览器前进到下一页" },
+  { icon: "📑", name: "PDF 导出", desc: "将当前网页导出为 PDF" },
+  // ====== 交互 (9) ======
   { icon: "🖱️", name: "点击", desc: "CSS 选择器或文本匹配点击" },
-  { icon: "⌨️", name: "填表", desc: "模拟真实用户输入" },
-  { icon: "📝", name: "提取", desc: "提取页面文字或属性" },
-  { icon: "⬇️", name: "滚动", desc: "方向滚动、到顶到底、到元素" },
-  { icon: "🔽", name: "下拉选择", desc: "从 select 中选择选项" },
+  { icon: "⌨️", name: "填表", desc: "模拟真人输入，带延迟" },
+  { icon: "🗑️", name: "清空", desc: "清空输入框内容" },
+  { icon: "🔽", name: "下拉选择", desc: "按 value/label/索引选择" },
   { icon: "⌨️", name: "键盘按键", desc: "Enter/Escape/Tab/组合键" },
-  { icon: "🔄", name: "标签页管理", desc: "新建/切换/关闭标签页" },
-  { icon: "🍪", name: "Cookie 持久化", desc: "重启后登录态自动恢复" },
-  { icon: "📄", name: "PDF 导出", desc: "将网页导出为 PDF" },
-  { icon: "🖼️", name: "元素截图", desc: "截取页面中指定元素的快照" },
-  { icon: "🕸️", name: "Iframe 支持", desc: "切换到 iframe 内操作" },
+  { icon: "🖱️", name: "悬停", desc: "鼠标悬停触发 hover 效果" },
+  { icon: "📋", name: "提交表单", desc: "提交页面表单" },
+  { icon: "⬇️", name: "滚动", desc: "方向/到顶到底/到元素" },
+  { icon: "✋", name: "拖拽", desc: "拖拽元素到目标位置" },
+  // ====== 提取 (5) ======
+  { icon: "📝", name: "提取文字", desc: "提取整页或元素的可见文本" },
+  { icon: "🔧", name: "执行 JS", desc: "在页面中执行自定义代码" },
+  { icon: "🖼️", name: "元素截图", desc: "截取指定元素的快照" },
+  { icon: "🍪", name: "获取 Cookie", desc: "获取当前页面 Cookie" },
+  { icon: "🗑️", name: "删除 Cookie", desc: "清除指定或全部 Cookie" },
+  // ====== 标签页 (3) ======
+  { icon: "🆕", name: "新建标签页", desc: "打开新的空白标签页" },
+  { icon: "🔄", name: "切换标签页", desc: "按索引切换到指定标签页" },
+  { icon: "❌", name: "关闭标签页", desc: "关闭当前或指定标签页" },
+  // ====== 高级 (9) ======
+  { icon: "⏱️", name: "等待", desc: "等待时间或元素出现/消失" },
+  { icon: "🕸️", name: "Iframe", desc: "切换到 iframe 内操作" },
   { icon: "📋", name: "控制台日志", desc: "获取页面 console 输出" },
-  { icon: "🔧", name: "自定义 JS", desc: "在页面中执行任意 JavaScript" },
+  { icon: "🔄", name: "重置浏览器", desc: "浏览器卡死时重置实例" },
+  { icon: "🎯", name: "坐标点击", desc: "在指定坐标点击（过验证码）" },
+  { icon: "📐", name: "元素定位", desc: "获取元素位置和大小" },
+  { icon: "👁️", name: "视口信息", desc: "获取视口大小和滚动位置" },
+  { icon: "🖱️", name: "鼠标移动", desc: "分段模拟真人鼠标轨迹" },
+  { icon: "🚪", name: "关闭页面", desc: "关闭当前页面" },
+  // ====== Pro (2) ======
+  { icon: "⭐", name: "批量自动化", desc: "PRO — 按顺序执行多步操作" },
+  { icon: "⭐", name: "数据导出", desc: "PRO — 数据导出 CSV/JSON" },
 ];
 
 const PLANS = [
@@ -22,7 +50,7 @@ const PLANS = [
     tier: "免费版",
     price: "$0",
     features: [
-      "全部 34 个工具",
+      "全部 36 个工具",
       "单标签页操作",
       "Cookie 持久化",
       "所有基础交互",
@@ -125,7 +153,7 @@ export default function Home() {
       {/* ====== 功能列表 ====== */}
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "60px 20px" }}>
         <h2 style={{ fontSize: 28, textAlign: "center", marginBottom: 40 }}>
-          30+ 工具，覆盖浏览器自动化全场景
+          36 个工具，覆盖浏览器自动化全场景
         </h2>
         <div
           style={{
