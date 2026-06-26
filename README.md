@@ -142,7 +142,7 @@ mcp-browse-agent
 >
 > **"提取当前页面的所有链接"**
 
-### 在 OpenAI Codex CLI 中配置
+### 在 OpenAI Codex 中配置
 
 编辑 `~/.codex/config.toml`：
 
@@ -152,7 +152,7 @@ command = "mcp-browse-agent"
 args = []
 ```
 
-配置后在 Codex CLI 会话中使用 `/mcp` 确认服务已加载：
+配置后在 Codex 会话中使用 `/mcp` 确认服务已加载：
 > *"帮我打开百度首页，截图给我看"*
 >
 > *"帮我提取当前页面的文字内容"*
