@@ -1,6 +1,6 @@
 {
   "name": "@yubao2000/mcp-browser-agent",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "让 AI Agent (Claude/GPT) 像人一样操作浏览器的 MCP Server — 30个工具/Cookie持久化/PDF/标签页管理",
   "type": "module",
   "bin": {
