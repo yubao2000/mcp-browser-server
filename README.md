@@ -133,7 +133,26 @@ mcp-browse-agent
 - `MCP_BROWSER_CONFIG` — 配置文件路径
 - `MCP_PRO_LICENSE` — Pro 版 License Key
 
-### Cookie 持久化
+### 👁️ 显示浏览器窗口（调试/过验证码）
+
+默认浏览器在后台运行（不可见）。如果需要看到浏览器窗口：
+
+```bash
+# 方式 1：环境变量
+SHOW_BROWSER=true mcp-browse-agent
+
+# 方式 2：配置文件 .mcp-browser.json
+{
+  "showBrowser": true
+}
+```
+
+浏览器窗口会弹出，你可以看到 AI 的每一步操作。适用于：
+- 调试（看 AI 点了哪里、填了什么）
+- 遇到滑动验证码时手动操作
+- 演示/录屏
+
+### 🍪 Cookie 持久化
 
 Cookie 自动保存在 `.browser-data/cookies.json`。重启服务后，之前登录的网站自动恢复登录态。对于需要频繁登录的网站（Gmail、知乎、小红书等），只需登录一次。
 
