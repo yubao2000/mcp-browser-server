@@ -112,6 +112,61 @@ mcp-browse-agent
 >
 > **"帮我登录 Gmail，填上用户名和密码，点击登录"**
 
+### 在 Cursor 中配置
+
+打开 Cursor → 设置 → **Features** → **MCP Servers** → **Add New MCP Server**：
+
+| 字段 | 填什么 |
+|:----|:--------|
+| **Name** | `browser-agent` |
+| **Type** | `command` |
+| **Command** | `mcp-browse-agent` |
+| **Arguments** | 留空 |
+
+或者直接在项目下创建 `.cursor/mcp.json` 文件：
+
+```json
+{
+  "mcpServers": {
+    "browser-agent": {
+      "command": "mcp-browse-agent",
+      "args": []
+    }
+  }
+}
+```
+
+配置后在 Cursor 中使用 ⌘ . 或 Ctrl . 打开 MCP 面板，选择 browser-agent 即可：
+
+> **"帮我打开百度首页，截图给我看"**
+>
+> **"提取当前页面的所有链接"**
+
+### 在 Windsurf (Codex) 中配置
+
+打开 Windsurf → **设置** → **MCP Servers** → **Add New Server**：
+
+| 字段 | 填什么 |
+|:----|:--------|
+| **Name** | `browser-agent` |
+| **Transport** | `stdio` |
+| **Command** | `mcp-browse-agent` |
+
+或在全局配置中添加 `~/.codeium/windsurf.json`：
+
+```json
+{
+  "mcpServers": {
+    "browser-agent": {
+      "command": "mcp-browse-agent",
+      "args": []
+    }
+  }
+}
+```
+
+在 Windsurf 中打开 Cascade，启用 MCP 工具后即可使用。支持截图、网页数据提取、表单填写等场景。
+
 ---
 
 ## 🛠 配置文件
